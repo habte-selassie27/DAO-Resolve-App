@@ -1311,18 +1311,26 @@ class DAOResolve(gl.Contract):
 
     @gl.public.view
     def list_proposals(self, offset: u32, limit: u32) -> list:
-        """List proposals in registration order. Bounded page size."""
-        return [
-            {
-                "proposal_id": proposal.proposal_id,
-                "content_ref": proposal.content_ref,
-                "status_note": proposal.status_note,
-                "created_at": int(proposal.created_at),
-                "created_by": proposal.created_by.as_hex,
-                "event_count": len(self.proposal_events[proposal.proposal_id]),
-            }
-            for proposal in _page(self.proposals, offset, limit)
-        ]
+        """List proposals in registration order. Bounded page size.
+
+        Page the registration-order id list, exactly as list_rules and
+        list_disputes do. `self.proposals` is a TreeMap keyed by proposal id,
+        so slicing it raised TypeError on chain and the view was unreadable.
+        """
+        result = []
+        for proposal_id in _page(self.proposal_ids, offset, limit):
+            proposal = self.proposals[proposal_id]
+            result.append(
+                {
+                    "proposal_id": proposal.proposal_id,
+                    "content_ref": proposal.content_ref,
+                    "status_note": proposal.status_note,
+                    "created_at": int(proposal.created_at),
+                    "created_by": proposal.created_by.as_hex,
+                    "event_count": len(self.proposal_events[proposal_id]),
+                }
+            )
+        return result
 
     @gl.public.view
     def get_proposal(self, proposal_id: str) -> dict:

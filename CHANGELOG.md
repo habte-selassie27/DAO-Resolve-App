@@ -2,6 +2,38 @@
 
 All notable changes to DAOResolve are recorded here.
 
+## 2026-10-24 (fix: `list_proposals` was unreadable on chain)
+
+DONE:
+- Fixed the Proposals screen failing with "Could not load proposals" against every
+  StudioNet deployment. `list_proposals` paged `self.proposals`, a `TreeMap[str,
+  ProposalRecord]`, with an integer slice, so every call raised
+  `TypeError: '<' not supported between instances of 'slice' and 'str'` and reached the RPC
+  as `KeyError` / `execution failed`. The view now pages `self.proposal_ids` and looks each
+  record up, matching `list_rules` and `list_disputes`.
+- Added `tests/direct/test_proposals_registry.py`: empty registry, registration order,
+  bounded paging, page-size bounds, per-proposal event counts, and equality with
+  `get_proposal`. The view previously had no coverage at all, which is why it shipped broken.
+- Fixed `scripts/seed_demo.ts`: it sent the same forbidden `role_address` key the rule form
+  did, so every rule carrying a check rolled back and only `R-TREASURY` was registered. It
+  also treated an `ACCEPTED` transaction as success even when the contract had rolled back,
+  which is how the empty deployment looked seeded. It now reads the receipt, fails on a
+  rollback with the contract's message, and treats duplicate registrations as skips.
+- Registered the missing `R-CONTENT` rule the seed referenced but never created.
+- Redeployed to `0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd` and re-seeded; the frontend
+  config, README, and deployment record point at it.
+
+PROOF:
+- `python3.12 -m pytest tests/direct/test_proposals_registry.py -v` -> **6 passed** (the
+  same tests failed before the fix with the exact slice/str `TypeError`).
+- `python3.12 -m pytest tests/direct/ -q` -> **177 passed**.
+- `genvm-lint check contracts/dao_resolve.py --json` -> `{"ok":true,...}` (only the
+  informational newer-runner notice).
+- `genlayer call 0x70bE655a… list_proposals --args 0 50` -> 4 proposals, `event_count: 2`
+  each, where the three earlier deployments returned `execution failed`.
+- `genlayer call … get_assessment_history --args D-REVIEW 0 10` -> `verdict: 'VIOLATION'`,
+  `decided_by: 'DETERMINISTIC_CHECKS'`, `deterministic_fail_count: 1`.
+
 ## 2026-10-24 (plain-language copy in place of implementation jargon)
 
 DONE:

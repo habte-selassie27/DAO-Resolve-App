@@ -1,5 +1,42 @@
 # StudioNet Deployment Record
 
+## Current deployment (`0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd`)
+
+**Status: current — use this one.** Deployed on 2026-10-24 from
+`contracts/dao_resolve.py` after fixing `list_proposals`.
+
+| Item | Value |
+|---|---|
+| Contract address | `0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd` |
+| Deploy transaction | `0x7078a36ef1352012fef303e3811298c671b5606bba8b434ad73b174d2cfd4ce3` |
+| Deploy status | `ACCEPTED`, 5 validators, 3 `AGREE`, 2 idle |
+| Deployer / owner | `0x5B3661C576c7001e6d6279C67F3779705d334c89` |
+| Runner | `py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6` |
+| Explorer | https://explorer-studio.genlayer.com/address/0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd |
+| Studio import | https://studio.genlayer.com/?import-contract=0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd |
+
+Seeded demo data (all verified by reading the contract back):
+
+- Rules `R-REVIEW`, `R-DISCUSSION`, `R-TREASURY`, `R-CONTENT`
+- Proposals `P-REVIEW`, `P-DISCUSSION`, `P-TREASURY`, `P-CONTENT`, 2 events each
+- Disputes `D-REVIEW` and `D-CONTENT` evaluated: `VIOLATION`, `decided_by =
+  DETERMINISTIC_CHECKS`, 1 failed check each, no model call
+- Disputes `D-DISCUSSION` (interpretive) and `D-TREASURY` (vote-required category) left `OPEN`
+
+### Why this deployment replaced the earlier ones
+
+`list_proposals` paged `self.proposals`, a `TreeMap` keyed by proposal id, with an
+integer slice. Every call raised `TypeError: '<' not supported between instances of
+'slice' and 'str'`, which reached the RPC as `KeyError` / `execution failed`. The
+frontend's Proposals screen therefore showed "Could not load proposals" on all three
+earlier StudioNet addresses, including the ones listed below. `list_rules` and
+`list_disputes` page their `DynArray` id lists and were unaffected.
+
+The view now pages `self.proposal_ids`, and `tests/direct/test_proposals_registry.py`
+covers the empty registry, registration order, paging, page-size bounds, and event
+counts. The earlier addresses are kept below as history only; they still run the
+broken view because a deployed contract cannot be patched.
+
 All data below was produced on 2026-10-20 against GenLayer StudioNet
 (chain id `61999`, RPC `https://studio.genlayer.com/api`). Nothing here is
 invented: every hash and address comes from real command output, and every

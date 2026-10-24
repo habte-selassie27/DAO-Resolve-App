@@ -2,7 +2,7 @@ import { activeNetwork } from "./networks.js";
 import schema from "./schema/dao_resolve.json";
 
 const addresses = {
-  studionet: import.meta.env.VITE_CONTRACT_ADDRESS || "0x8A4bEfBcd15A27155AA2D4b132F6AB86123B56F2",
+  studionet: import.meta.env.VITE_CONTRACT_ADDRESS || "0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd",
   testnetBradbury: import.meta.env.VITE_CONTRACT_ADDRESS || "",
   localnet: import.meta.env.VITE_CONTRACT_ADDRESS || "",
 };

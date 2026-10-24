@@ -38,48 +38,41 @@ test.describe("deployed contract reads", () => {
     expect(errors).toEqual([]);
   });
 
-  test("D1 is a code-decided reassessment", async ({ page }) => {
-    await loadLive(page, "/", async () => {
-      await expect(page.getByRole("heading", { name: /Did the process hold/ })).toBeVisible(READY);
+  // The Proposals screen previously failed here on every deployment:
+  // "Could not load proposals" because list_proposals raised KeyError on chain.
+  test("proposals screen lists the seeded proposals", async ({ page }) => {
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await loadLive(page, "/proposals", async () => {
+      await expect(page.getByRole("heading", { name: "Proposals" })).toBeVisible(READY);
+      await expect(page.getByText("P-REVIEW", { exact: true })).toBeVisible(READY);
     });
-    const seeded = (await page.locator("table tbody tr").count()) > 0;
-    test.skip(!seeded, "this deployment has no seeded disputes");
-    await loadLive(page, "/disputes/D1", async () => {
-      await expect(page.getByRole("heading", { name: "Dispute D1" })).toBeVisible(READY);
-      await expect(page.getByText("RE_EVALUATED").first()).toBeVisible(READY);
-      await expect(page.getByText("Compliant").first()).toBeVisible(READY);
-      await expect(page.getByText("Rule check").first()).toBeVisible(READY);
-      await expect(page.getByText(/challenge window closed/i).last()).toBeVisible(READY);
-    });
+    await expect(page.getByText("Could not load proposals")).toHaveCount(0);
+    await expect(page.getByText("P-DISCUSSION", { exact: true })).toBeVisible();
+    await expect(page.getByText("P-TREASURY", { exact: true })).toBeVisible();
+    await expect(page.getByText("P-CONTENT", { exact: true })).toBeVisible();
+    expect(errors).toEqual([]);
   });
 
-  test("D4 is a finalized consensus assessment", async ({ page }) => {
-    await loadLive(page, "/", async () => {
-      await expect(page.getByRole("heading", { name: /Did the process hold/ })).toBeVisible(READY);
-    });
-    const seeded = (await page.locator("table tbody tr").count()) > 0;
-    test.skip(!seeded, "this deployment has no seeded disputes");
-    await loadLive(page, "/disputes/D4", async () => {
-      await expect(page.getByRole("heading", { name: "Dispute D4" })).toBeVisible(READY);
-      await expect(page.getByText("Finalized record")).toBeVisible(READY);
-      await expect(page.getByText("Inconclusive").first()).toBeVisible(READY);
-      await expect(page.getByText("Validator consensus").first()).toBeVisible(READY);
-    });
-  });
-
-  test("ENS-7.1 shows the recorder's sourced events", async ({ page }) => {
-    await loadLive(page, "/", async () => {
-      await expect(page.getByRole("heading", { name: /Did the process hold/ })).toBeVisible(READY);
-    });
-    const seeded = (await page.locator("table tbody tr").count()) > 0;
-    test.skip(!seeded, "this deployment has no seeded disputes");
-    await loadLive(page, "/proposals/ENS-7.1", async () => {
-      await expect(page.getByRole("heading", { name: "ENS-7.1" })).toBeVisible(READY);
+  test("P-REVIEW shows its sourced process events", async ({ page }) => {
+    await loadLive(page, "/proposals/P-REVIEW", async () => {
+      await expect(page.getByRole("heading", { name: "P-REVIEW" })).toBeVisible(READY);
       await expect(page.getByRole("heading", { name: "Process rail" })).toBeVisible(READY);
       await expect(page.getByText("SUBMITTED").first()).toBeVisible(READY);
       await expect(page.getByText("VOTING_STARTED").first()).toBeVisible(READY);
-      await expect(page.getByText("VOTING_ENDED").first()).toBeVisible(READY);
-      await expect(page.getByText("snapshot.box").first()).toBeVisible(READY);
     });
+  });
+
+  test("D-REVIEW is decided by code, not consensus", async ({ page }) => {
+    await loadLive(page, "/disputes/D-REVIEW", async () => {
+      await expect(page.getByRole("heading", { name: "Dispute D-REVIEW" })).toBeVisible(READY);
+      await expect(page.getByText("Rule check").first()).toBeVisible(READY);
+      await expect(page.getByText("Violation").first()).toBeVisible(READY);
+      await expect(page.getByText("Assessment history")).toBeVisible(READY);
+    });
+    // The page mentions "validator consensus" in its explanation of the pipeline, so
+    // scope the check to the verdict badge: DecidedByBadge uses .pending for an
+    // INTERPRETATION (consensus) result and .system for a code-decided one.
+    await expect(page.locator(".badge.pending")).toHaveCount(0);
   });
 });

@@ -14,10 +14,29 @@ if (!/^0x[a-fA-F0-9]{40}$/.test(demoActor)) {
 }
 const now = Math.floor(Date.now() / 1000);
 
+// An ACCEPTED transaction can still have rolled back inside the contract; the
+// receipt is the only honest source of success, so a rollback is a failure here.
+function rollbackOf(output) {
+  // The receipt pretty-prints status and payload on separate lines, so allow
+  // whitespace between them. Only 'rollback' counts: validator vote lines also
+  // carry `status: 'contract_error', payload: 'idle'` when a validator never voted.
+  const match = output.match(/status: 'rollback',\s*payload: '([^']*)'/);
+  return match ? match[1] : "";
+}
+
 function write(method, args, { allowExisting = false } = {}) {
   const command = ["write", contract, method, "--args", ...args.map(String)];
   try {
     const output = execFileSync("genlayer", command, { encoding: "utf8", stdio: "pipe" });
+    const rolledBack = rollbackOf(output);
+    if (rolledBack) {
+      if (allowExisting && /already exists|already evaluated|already recorded|duplicate|invalid state/i.test(rolledBack)) {
+        console.log(`SKIP ${method} (${rolledBack})`);
+        return;
+      }
+      console.error(`FAIL ${method}: ${rolledBack}`);
+      process.exit(1);
+    }
     const status = output.match(/status_name:\s*'([^']+)'/)?.[1] || "submitted";
     console.log(`PASS ${method} (${status})`);
     execFileSync("sleep", ["2"]);
@@ -45,7 +64,6 @@ const reviewChecks = JSON.stringify([
     to_event_type: "VOTING_STARTED",
     threshold: 172800,
     role: "",
-    role_address: "0x0000000000000000000000000000000000000000",
   },
 ]);
 const discussionChecks = JSON.stringify([
@@ -57,7 +75,18 @@ const discussionChecks = JSON.stringify([
     to_event_type: "",
     threshold: 0,
     role: "",
-    role_address: "0x0000000000000000000000000000000000000000",
+  },
+]);
+
+const disclosureChecks = JSON.stringify([
+  {
+    check_id: "disclosure",
+    kind: "REQUIRED_EVENT",
+    event_type: "DISCLOSURE_SUBMITTED",
+    from_event_type: "",
+    to_event_type: "",
+    threshold: 0,
+    role: "",
   },
 ]);
 
@@ -98,6 +127,18 @@ write(
   { allowExisting: true }
 );
 write("set_category_vote_required", ["QUORUM", "true"], { allowExisting: true });
+write(
+  "register_rule",
+  [
+    "R-CONTENT",
+    "Conflict-of-interest disclosure",
+    "A proposal must record a DISCLOSURE_SUBMITTED event before it can be assessed as compliant.",
+    "DISCLOSURE",
+    "DETERMINISTIC_ONLY",
+    disclosureChecks,
+  ],
+  { allowExisting: true }
+);
 
 const proposals = [
   ["P-REVIEW", "https://forum.example.org/t/p-review", "Review period shorter than the rule requires."],

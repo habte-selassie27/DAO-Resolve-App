@@ -7,8 +7,8 @@ challengeable, and clearly labelled as advisory.
 
 Live demo: <https://daoresolve.vercel.app>
 
-Live contract on StudioNet (_current repo deployment_, re-seeded in this session):
-[`0x2cbb7C59Be17a401bFC0C18933A00783914A1296`](https://explorer-studio.genlayer.com/address/0x2cbb7C59Be17a401bFC0C18933A00783914A1296)
+Live contract on StudioNet (_current repo deployment_, seeded with the demo rules and disputes):
+[`0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd`](https://explorer-studio.genlayer.com/address/0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd)
 
 Official DAO-Resolve.py StudioNet manual deployment:
 [`0xc9C3be0b1A5cA36d4c4f54b5d48dEB9834e04Ce3`](https://explorer-studio.genlayer.com/address/0xc9C3be0b1A5cA36d4c4f54b5d48dEB9834e04Ce3)
@@ -286,7 +286,7 @@ CI installs the matching browser instead.
 | Live frontend | <https://daoresolve.vercel.app> |
 | Hosting | Vercel static build plus a same-origin `/api` rewrite to StudioNet |
 | Network | StudioNet (gasless), chain id `61999` |
-| Demo contract | `0x2cbb7C59Be17a401bFC0C18933A00783914A1296` |
+| Demo contract | `0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd` |
 | Fresh smoke deployment | `0x1bB0D68FF747f74ACccD1FBb3D992C9B2d23335e` |
 | Browser-wallet smoke write | `0x23cc5d6ea3d358bdbb5389353c9efd98bccbab987dc7520d77452ee361e6e2e4` (`FINALIZED`) |
 | Schema | `frontend/src/config/schema/dao_resolve.json`, `deployments/studionet.schema.json` |
