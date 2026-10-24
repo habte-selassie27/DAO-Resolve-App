@@ -1310,6 +1310,21 @@ class DAOResolve(gl.Contract):
         return result
 
     @gl.public.view
+    def list_proposals(self, offset: u32, limit: u32) -> list:
+        """List proposals in registration order. Bounded page size."""
+        return [
+            {
+                "proposal_id": proposal.proposal_id,
+                "content_ref": proposal.content_ref,
+                "status_note": proposal.status_note,
+                "created_at": int(proposal.created_at),
+                "created_by": proposal.created_by.as_hex,
+                "event_count": len(self.proposal_events[proposal.proposal_id]),
+            }
+            for proposal in _page(self.proposals, offset, limit)
+        ]
+
+    @gl.public.view
     def get_proposal(self, proposal_id: str) -> dict:
         """Return proposal metadata and event count."""
         clean_id = _clean_id(proposal_id, "proposal_id")
@@ -1323,6 +1338,40 @@ class DAOResolve(gl.Contract):
             "created_by": proposal.created_by.as_hex,
             "event_count": len(self.proposal_events[clean_id]),
         }
+
+    @gl.public.view
+    def list_rules(self, offset: u32, limit: u32) -> list:
+        """List active rules from registration order. Bounded page size."""
+        result = []
+        for rule_id in _page(self.rule_ids, offset, limit):
+            rule = self.rules[_rule_key(rule_id, int(self.rule_versions[rule_id]))]
+            if rule.status == RULE_ACTIVE:
+                result.append(
+                    {
+                        "rule_id": rule.rule_id,
+                        "version": int(rule.version),
+                        "title": rule.title,
+                        "clause_text": rule.clause_text,
+                        "category": rule.category,
+                        "interpretation": rule.interpretation,
+                    }
+                )
+        return result
+
+    @gl.public.view
+    def list_disputes(self, offset: u32, limit: u32) -> list:
+        """List disputes in opening order. Bounded page size."""
+        return [
+            {
+                "dispute_id": self.disputes[dispute_id].dispute_id,
+                "rule_id": self.disputes[dispute_id].rule_id,
+                "rule_version": int(self.disputes[dispute_id].rule_version),
+                "proposal_id": self.disputes[dispute_id].proposal_id,
+                "status": self.disputes[dispute_id].status,
+                "challenge_count": int(self.disputes[dispute_id].challenge_count),
+            }
+            for dispute_id in _page(self.dispute_ids, offset, limit)
+        ]
 
     @gl.public.view
     def get_events(self, proposal_id: str, offset: u32, limit: u32) -> list:

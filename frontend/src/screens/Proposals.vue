@@ -6,17 +6,12 @@
         <p class="muted" style="margin: 0">
           Proposals are the anchor for process events. Anyone can register one; the contract
           records the signer. A dispute points at one proposal and one pinned rule version.
+          The list below is read directly from the chain.
         </p>
       </div>
     </div>
 
-    <div class="notice system">
-      <p class="small" style="margin: 0">
-        This page lists the proposals known to this deployment plus any you register from this
-        browser. Every entry is read directly from the chain; ids that do not exist are skipped,
-        so nothing here is invented.
-      </p>
-    </div>
+
 
     <ErrorNotice
       v-if="error"
@@ -39,6 +34,7 @@
         </p>
         <div class="between">
           <span class="tiny muted">registered {{ formatTime(proposal.created_at) }}</span>
+          <span class="tiny muted">by {{ safeAddress(proposal.created_by) }}</span>
           <RouterLink class="button secondary small" :to="`/proposals/${proposal.proposal_id}`">Open process</RouterLink>
         </div>
       </article>
@@ -84,7 +80,7 @@ import EmptyState from "../components/EmptyState.vue";
 import ErrorNotice from "../components/ErrorNotice.vue";
 import { state } from "../lib/store.js";
 import { emptyCopy } from "../domain/copy.js";
-import { formatTime } from "../lib/format.js";
+import { formatTime, safeAddress } from "../lib/format.js";
 import { listProposals } from "../lib/chain/reads.js";
 import { registerProposal } from "../lib/chain/writes.js";
 import { runTransaction } from "../lib/chain/tx.js";
@@ -149,8 +145,8 @@ async function submit() {
           contentRef: form.contentRef,
           statusNote: form.statusNote,
         }),
-      // Remember the id before the refresh so the new proposal is included in
-      // this browser's list (the contract has no enumeration view).
+      // The new proposal is now on chain and returned by list_proposals, so this
+      // browser refresh does not need to remember it for the next load.
       onFinalized: () => {
         rememberProposal(proposalId);
         load();

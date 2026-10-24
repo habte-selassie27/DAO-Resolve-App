@@ -20,6 +20,11 @@ const rules = [
     action: "Refresh the record and check the available actions.",
   },
   {
+    match: /proposal already exists/i,
+    message: "That proposal id is already registered on chain.",
+    action: "Use a different proposal id.",
+  },
+  {
     match: /challenge window closed/i,
     message: "The challenge window has closed for this assessment.",
     action: "The assessment can now be finalized if nothing else is pending.",

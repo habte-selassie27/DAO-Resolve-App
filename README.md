@@ -10,6 +10,9 @@ Live demo: <https://daoresolve.vercel.app>
 Live contract on StudioNet:
 [`0x8A4bEfBcd15A27155AA2D4b132F6AB86123B56F2`](https://explorer-studio.genlayer.com/address/0x8A4bEfBcd15A27155AA2D4b132F6AB86123B56F2)
 
+Official DAO-Resolve.py StudioNet manual deployment:
+[`0xc9C3be0b1A5cA36d4c4f54b5d48dEB9834e04Ce3`](https://explorer-studio.genlayer.com/address/0xc9C3be0b1A5cA36d4c4f54b5d48dEB9834e04Ce3)
+
 ---
 
 ## The trust problem

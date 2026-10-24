@@ -60,11 +60,27 @@ export async function getProposal(proposalId) {
   return { ...structuredClone(proposal), event_count: (db.events[proposalId] || []).length };
 }
 
-export async function listProposals() {
-  return Object.keys(db.proposals).map((id) => ({
-    ...structuredClone(db.proposals[id]),
-    event_count: (db.events[id] || []).length,
-  }));
+export async function listProposals(offset = 0, limit = 50) {
+  return Object.keys(db.proposals)
+    .slice(offset, offset + limit)
+    .map((id) => ({
+      ...structuredClone(db.proposals[id]),
+      event_count: (db.events[id] || []).length,
+    }));
+}
+
+export async function listRules(offset = 0, limit = 50) {
+  return Object.values(db.rules)
+    .filter((rule) => rule.status === "ACTIVE")
+    .slice(offset, offset + limit)
+    .map(({ rule_id, version, title, clause_text, category, interpretation }) => ({
+      rule_id,
+      version,
+      title,
+      clause_text,
+      category,
+      interpretation,
+    }));
 }
 
 export async function getEvents(proposalId, offset = 0, limit = 50) {

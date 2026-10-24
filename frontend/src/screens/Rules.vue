@@ -117,7 +117,7 @@ import EmptyState from "../components/EmptyState.vue";
 import ErrorNotice from "../components/ErrorNotice.vue";
 import { emptyCopy } from "../domain/copy.js";
 import { state } from "../lib/store.js";
-import { listActiveRules } from "../lib/chain/reads.js";
+import { listActiveRules, listRules } from "../lib/chain/reads.js";
 import { registerRule } from "../lib/chain/writes.js";
 import { runTransaction } from "../lib/chain/tx.js";
 import { bindFormDraft } from "../lib/formPersistence.js";
@@ -168,7 +168,7 @@ const filteredRules = computed(() => {
 async function load() {
   loading.value = true;
   try {
-    rules.value = (await listActiveRules(0, 50)) || [];
+    rules.value = (await listRules(0, 50)) || [];
     error.value = "";
   } catch (loadError) {
     error.value = loadError?.message || String(loadError);
