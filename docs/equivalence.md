@@ -205,6 +205,48 @@ informational rather than proof.
 Run `pytest tests/direct/ -v` for the direct suite and
 `gltest tests/integration/ -v -s --network studionet` for real consensus.
 
+## Observed runs on StudioNet
+
+### 2026-10-24 — `D-ENS-PRICING`, live evidence, `0x70bE655a…`
+
+First recorded run where every validator fetched a real external page rather than a
+placeholder. Setup: rule `R-DISCUSSION` v1 (`NEEDS_INTERPRETATION`, one `REQUIRED_EVENT`
+check), evidence `D-ENS-PRICING#e1` = `https://discuss.ens.domains/t/22506.json`, a real
+ENS DAO temp-check thread.
+
+| Observation | Value |
+|---|---|
+| Transaction | `0xaf544f0a5b9466b313c38ff408877b44a0a6665c048f2026f0511d4f9397efc9` |
+| Validator votes | 3 `AGREE`, 2 `IDLE` |
+| Consensus reached | Yes, first attempt |
+| Verdict / band | `COMPLIANT` / `MEDIUM` |
+| Deterministic result | `PASS`, `count=1` |
+| Citations | clause `R-DISCUSSION`, evidence `D-ENS-PRICING#e1` |
+| Retries needed | None |
+
+What this shows and what it does not:
+
+- The live fetch worked inside GenVM and the readable-support rule was satisfied: the
+  leader's `web_digest` records 3,012 characters read from the same id the verdict cites,
+  and agreement required an evidence id readable in both runs.
+- The two `IDLE` votes are validators that did not vote, not disagreement. `IDLE` is why
+  the dispute shows 3 of 5 rather than a unanimous result; it does not weaken the
+  verdict, but it does mean "all validators agreed" would be the wrong way to describe it.
+- A single successful run is not a disagreement rate. It says nothing about how often
+  bands diverge on messier pages, which is what the repeated-run measurement in the
+  integration plan exists to capture. Treat it as one data point, not a measured rate.
+- Confidence `MEDIUM` rather than `HIGH` is consistent with a four-post thread: real
+  but thin discussion. The contract does not treat the band as a strength scale for the
+  final verdict, and neither should a reader.
+
+### Evidence format matters more than expected
+
+The 3,000-character window in `_fetch_url_text` makes the choice of URL the single
+biggest lever on whether consensus is achievable (finding F4). The Discourse `.json`
+view puts the proposal text and replies in the first few kilobytes; the rendered HTML
+page for the same thread would have spent most of the window on `<!DOCTYPE html>`, meta
+tags, and theme CSS. A DAO linking its forum thread should link the text-bearing view.
+
 ## Related documents
 
 - [design.md](design.md)

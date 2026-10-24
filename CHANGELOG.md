@@ -2,6 +2,38 @@
 
 All notable changes to DAOResolve are recorded here.
 
+## 2026-10-24 (real consensus run on live evidence)
+
+DONE:
+- Added `ENS-PRICING`, the first proposal in the deployment backed by a real public source
+  instead of a placeholder: the ENS DAO temp-check thread
+  `[Temp Check] Removing the price cliffs in ENSv2 pricing`
+  (`https://discuss.ens.domains/t/22506.json`).
+- Recorded its two events at the thread's real post timestamps (`SUBMITTED` 1792586617,
+  `DISCUSSION_OPENED` 1792598645) and opened `D-ENS-PRICING` against `R-DISCUSSION`.
+- Submitted the thread as `NEUTRAL` `URL` evidence and evaluated. Validators fetched it
+  live; the assessment is `COMPLIANT`, band `MEDIUM`, `decided_by = INTERPRETATION`,
+  citing `R-DISCUSSION` and `D-ENS-PRICING#e1`.
+- Chose the Discourse `.json` view deliberately: the contract keeps only the first 3,000
+  characters of a response, and this endpoint puts the proposal text and replies at the
+  top of the body where rendered HTML would have spent the window on markup (F4).
+- Replaced the stale demo table in the README, which still described the `0x2cbb…`
+  deployment's case ids, and labelled which proposals are placeholders and which are real.
+
+PROOF:
+- Evaluate transaction `0xaf544f0a5b9466b313c38ff408877b44a0a6665c048f2026f0511d4f9397efc9`,
+  3 `AGREE` / 2 `IDLE`, first attempt, no retries.
+- `genlayer call … get_assessment_history --args D-ENS-PRICING 0 10` ->
+  `verdict: 'COMPLIANT'`, `confidence_band: 'MEDIUM'`, `decided_by: 'INTERPRETATION'`,
+  `cited_clause_ids: ['R-DISCUSSION']`, `cited_evidence_ids: ['D-ENS-PRICING#e1']`,
+  `deterministic_results: [{check_id: 'discussion', kind: 'REQUIRED_EVENT', result: 'PASS'}]`.
+- `web_digest: 'D-ENS-PRICING#e1=3012:{"post_strea'` confirms 3,012 characters were read
+  from the cited source.
+
+LIMIT:
+- One run, not a measured disagreement rate. Recorded as a single observation in
+  `docs/equivalence.md` rather than as a reliability figure.
+
 ## 2026-10-24 (fix: `list_proposals` was unreadable on chain)
 
 DONE:

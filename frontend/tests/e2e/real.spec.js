@@ -63,6 +63,18 @@ test.describe("deployed contract reads", () => {
     });
   });
 
+  // The only case backed by a real public source: consensus read a live ENS forum thread.
+  test("D-ENS-PRICING shows a consensus verdict citing live evidence", async ({ page }) => {
+    await loadLive(page, "/disputes/D-ENS-PRICING", async () => {
+      await expect(page.getByRole("heading", { name: "Dispute D-ENS-PRICING" })).toBeVisible(READY);
+      await expect(page.getByText("Compliant").first()).toBeVisible(READY);
+      await expect(page.getByRole("heading", { name: "Assessment history" })).toBeVisible(READY);
+      await expect(page.getByText("discuss.ens.domains").first()).toBeVisible(READY);
+    });
+    // A consensus-decided assessment renders the .pending badge variant.
+    await expect(page.locator(".badge.pending").first()).toBeVisible();
+  });
+
   test("D-REVIEW is decided by code, not consensus", async ({ page }) => {
     await loadLive(page, "/disputes/D-REVIEW", async () => {
       await expect(page.getByRole("heading", { name: "Dispute D-REVIEW" })).toBeVisible(READY);

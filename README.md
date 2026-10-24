@@ -232,22 +232,21 @@ frontend and captured in [docs/screenshots](docs/screenshots)):
 
 | Case | What it shows |
 |---|---|
-| `D1` | Deterministic `COMPLIANT`, challenged, re-evaluated; `decided_by = DETERMINISTIC_CHECKS` |
-| `D4` | Real validator consensus, `INCONCLUSIVE`, finalized after the challenge window |
-| `D3` | Escalated to the DAO's own procedure |
-| `D5` | Deterministic `VIOLATION` (`MIN_ELAPSED` failed: no `SUBMITTED` event), then escalated because `TIMING` was vote-required at the time; the policy was restored afterward |
-| `ENS-7.1` | Recorder-ingested Snapshot proposal with three sourced events |
+| `D-REVIEW` | Deterministic `VIOLATION`; `MIN_ELAPSED` failed, the model was never called |
+| `D-CONTENT` | Deterministic `VIOLATION`; the required disclosure event was never recorded |
+| `D-ENS-PRICING` | **Real validator consensus on live evidence.** A real ENS DAO temp-check thread was fetched by every validator; verdict `COMPLIANT`, band `MEDIUM`, `decided_by = INTERPRETATION`, citing `R-DISCUSSION` and the forum evidence id |
+| `D-TREASURY` | Left `OPEN`; its category is vote-required, so it can only be escalated to the DAO |
+| `D-DISCUSSION` | Consensus `COMPLIANT` with **no evidence submitted at all** (`cited_evidence_ids: []`, empty `web_digest`). It rests only on the recorded `DISCUSSION_OPENED` event, so read it as the weak end of the scale, not as a real finding |
+
+The seeded proposals use `forum.example.org` placeholder links. Only
+`ENS-PRICING` points at a real public source, so only its assessment describes real
+world facts.
 
 A three-minute script with exact clicks and expected copy is in
-[docs/demo-script.md](docs/demo-script.md). The captured real-mode pages are
-[overview](docs/screenshots/overview-real.png),
-[D1](docs/screenshots/dispute-D1-real.png),
-[D4](docs/screenshots/dispute-D4-real.png),
-[ENS-7.1](docs/screenshots/proposal-ENS-7.1-real.png), the
-[browser-write smoke](docs/screenshots/browser-write-real.png), and the hosted
-[overview](docs/screenshots/vercel-overview-real.png),
-[D1](docs/screenshots/vercel-dispute-D1-real.png), and
-[D5](docs/screenshots/vercel-dispute-D5-real.png).
+[docs/demo-script.md](docs/demo-script.md). The captured real-mode pages in
+[docs/screenshots](docs/screenshots) were taken against the earlier `0x2cbb…`
+deployment and still show that contract's case ids; re-capture them against
+`0x70bE655a…` before publishing the demo video.
 
 ## Testing
 

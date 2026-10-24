@@ -15,13 +15,52 @@
 | Explorer | https://explorer-studio.genlayer.com/address/0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd |
 | Studio import | https://studio.genlayer.com/?import-contract=0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd |
 
+### Real consensus run on live evidence (`D-ENS-PRICING`)
+
+This is the case that demonstrates the interpretive path against a real public source
+rather than a placeholder:
+
+| Item | Value |
+|---|---|
+| Proposal | `ENS-PRICING` |
+| `content_ref` | https://discuss.ens.domains/t/22506.json |
+| Source | ENS DAO forum, topic 22506, `[Temp Check] Removing the price cliffs in ENSv2 pricing` |
+| Events | `SUBMITTED` at `1792586617`, `DISCUSSION_OPENED` at `1792598645` (both the thread's real post timestamps) |
+| Dispute | `D-ENS-PRICING` against `R-DISCUSSION` v1 |
+| Evidence | `D-ENS-PRICING#e1`, side `NEUTRAL`, kind `URL` |
+| Evaluate transaction | `0xaf544f0a5b9466b313c38ff408877b44a0a6665c048f2026f0511d4f9397efc9` |
+| Validator votes | 3 `AGREE`, 2 `IDLE` |
+| Verdict | `COMPLIANT`, band `MEDIUM` |
+| Decided by | `INTERPRETATION` (validator consensus), not code |
+| Deterministic checks | 1 pass: `REQUIRED_EVENT discussion — count=1` |
+| Cited | clause `R-DISCUSSION`, evidence `D-ENS-PRICING#e1` |
+| `web_digest` | `D-ENS-PRICING#e1=3012:{"post_strea` — 3012 characters were read, so the live fetch succeeded |
+
+The `web_digest` prefix is the only place the fetch result is visible from outside, and it
+is leader-asserted: it shows the page was read, not that the content is true. The
+`.json` view of a Discourse thread was chosen deliberately — a rendered HTML page would
+spend most of the 3,000-character window on markup (finding F4), while this endpoint
+returns the proposal text and replies at the top of the body.
+
+Event actors are the recorder address, not the forum authors. The forum gives us their
+handles (clowes.eth, nick.eth, raffy, stevegachau.eth) but no chain addresses, so the
+contract records who asserted the event, not who spoke.
+
 Seeded demo data (all verified by reading the contract back):
 
 - Rules `R-REVIEW`, `R-DISCUSSION`, `R-TREASURY`, `R-CONTENT`
 - Proposals `P-REVIEW`, `P-DISCUSSION`, `P-TREASURY`, `P-CONTENT`, 2 events each
+- Proposals `P-REVIEW` through `P-CONTENT` use `forum.example.org` placeholder links;
+  `ENS-PRICING` is the only proposal backed by a real public source
 - Disputes `D-REVIEW` and `D-CONTENT` evaluated: `VIOLATION`, `decided_by =
   DETERMINISTIC_CHECKS`, 1 failed check each, no model call
-- Disputes `D-DISCUSSION` (interpretive) and `D-TREASURY` (vote-required category) left `OPEN`
+- Dispute `D-ENS-PRICING` evaluated by validator consensus on live evidence: `COMPLIANT`,
+  band `MEDIUM` (details above)
+- Dispute `D-DISCUSSION` evaluated by consensus with no evidence submitted: `COMPLIANT`,
+  band `HIGH`, `cited_evidence_ids: []`, `web_digest: ''`. The verdict rests entirely on
+  the recorded `DISCUSSION_OPENED` event, so it is the weakest case in the deployment and
+  is presented as such rather than as an example of evidence-based assessment
+- Dispute `D-TREASURY` left `OPEN` (vote-required category, only escalatable)
 
 ### Why this deployment replaced the earlier ones
 
