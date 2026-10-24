@@ -1,0 +1,86 @@
+{
+  "contract": "0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd",
+  "rule": {
+    "id": "R-DISCUSSION",
+    "version": 5,
+    "interpretation": "NEEDS_INTERPRETATION"
+  },
+  "proposal": "ENS-PRICING",
+  "evidence": "https://discuss.ens.domains/t/22506.json",
+  "runs_attempted": 1,
+  "runs_assessed": 1,
+  "runs_failed": 0,
+  "verdicts": {
+    "COMPLIANT": 1
+  },
+  "bands": {
+    "HIGH": 1
+  },
+  "validator_votes": {
+    "AGREE": 8,
+    "DISAGREE": 0,
+    "IDLE": 4,
+    "OTHER": 0,
+    "validators": 12,
+    "rotations": 0
+  },
+  "results": [
+    {
+      "run": 1,
+      "dispute_id": "M-ENS-20261025-3",
+      "steps": [
+        {
+          "method": "open_dispute",
+          "ok": true,
+          "hash": "0x8d01110ca2609c7872c40532d4f95fbfe0117482055f54b45d9c505f5c516121",
+          "exit_code": 0,
+          "status": "ACCEPTED",
+          "AGREE": 2,
+          "DISAGREE": 0,
+          "IDLE": 2,
+          "OTHER": 0,
+          "validators": 4,
+          "rotations": 0,
+          "leader_execution_result": "SUCCESS"
+        },
+        {
+          "method": "submit_evidence",
+          "ok": true,
+          "hash": "0xbe769047325445a8d43c2e9783421e79d6af6cf923b96b70131ddda72ad38556",
+          "exit_code": 0,
+          "status": "ACCEPTED",
+          "AGREE": 4,
+          "DISAGREE": 0,
+          "IDLE": 0,
+          "OTHER": 0,
+          "validators": 4,
+          "rotations": 0,
+          "leader_execution_result": "SUCCESS"
+        },
+        {
+          "method": "evaluate_dispute",
+          "ok": true,
+          "hash": "0x8863fa07da84b1568e3721963564d4af22932c1294de58062a337e078ff7f72d",
+          "exit_code": 0,
+          "status": "ACCEPTED",
+          "AGREE": 2,
+          "DISAGREE": 0,
+          "IDLE": 2,
+          "OTHER": 0,
+          "validators": 4,
+          "rotations": 0,
+          "leader_execution_result": "SUCCESS"
+        }
+      ],
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-3#e1"
+      ],
+      "failed_at": null,
+      "assessments": 1,
+      "assessment_id": "M-ENS-20261025-3#a1"
+    }
+  ]
+}

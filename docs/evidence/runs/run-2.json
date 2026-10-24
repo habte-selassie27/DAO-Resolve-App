@@ -1,0 +1,77 @@
+{
+  "contract": "0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd",
+  "rule": {
+    "id": "R-DISCUSSION",
+    "version": 5,
+    "interpretation": "NEEDS_INTERPRETATION"
+  },
+  "proposal": "ENS-PRICING",
+  "evidence": "https://discuss.ens.domains/t/22506.json",
+  "runs_attempted": 1,
+  "runs_assessed": 1,
+  "runs_failed": 0,
+  "verdicts": {
+    "COMPLIANT": 1
+  },
+  "bands": {
+    "HIGH": 1
+  },
+  "validator_votes": {
+    "AGREE": 6,
+    "DISAGREE": 0,
+    "IDLE": 2,
+    "OTHER": 0,
+    "validators": 8,
+    "rotations": 0
+  },
+  "results": [
+    {
+      "run": 1,
+      "dispute_id": "M-ENS-20261025-2",
+      "steps": [
+        {
+          "method": "open_dispute",
+          "ok": true,
+          "skipped": true
+        },
+        {
+          "method": "submit_evidence",
+          "ok": true,
+          "hash": "0x50ea149fdd7b506ce613240e629c85a2addfa0d0b3cdb37903b78cf36a448446",
+          "exit_code": 0,
+          "status": "ACCEPTED",
+          "AGREE": 3,
+          "DISAGREE": 0,
+          "IDLE": 1,
+          "OTHER": 0,
+          "validators": 4,
+          "rotations": 0,
+          "leader_execution_result": "SUCCESS"
+        },
+        {
+          "method": "evaluate_dispute",
+          "ok": true,
+          "hash": "0x7313454fd1c41a6666cd3a5b6f50fd5686d2b4a8030f174023c7bb90b3f6c5cb",
+          "exit_code": 0,
+          "status": "ACCEPTED",
+          "AGREE": 3,
+          "DISAGREE": 0,
+          "IDLE": 1,
+          "OTHER": 0,
+          "validators": 4,
+          "rotations": 0,
+          "leader_execution_result": "SUCCESS"
+        }
+      ],
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-2#e1"
+      ],
+      "failed_at": null,
+      "assessments": 1,
+      "assessment_id": "M-ENS-20261025-2#a1"
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "measured_at": "2026-10-24T22:55:03.329Z",
+  "contract": "0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd",
+  "rule": {
+    "id": "R-DISCUSSION",
+    "version": 5,
+    "interpretation": "NEEDS_INTERPRETATION"
+  },
+  "proposal": "ENS-PRICING",
+  "evidence": "https://discuss.ens.domains/t/22506.json",
+  "harness": "scripts/measure_consensus.mjs",
+  "summary": {
+    "sample_runs": 8,
+    "runs_with_assessment": 8,
+    "runs_failed": 0,
+    "verdicts": {
+      "COMPLIANT": 8
+    },
+    "bands": {
+      "HIGH": 8
+    },
+    "decided_by": {
+      "INTERPRETATION": 8
+    },
+    "runs_citing_readable_evidence": 8,
+    "validator_slots": 32,
+    "total_agree": 19,
+    "total_disagree": 0,
+    "total_idle": 13,
+    "rotations_total": 0,
+    "excluded": [
+      {
+        "dispute_id": "M-ENS-20261025-1",
+        "reason": "first build of the harness was killed by the caller before writing its record; the dispute and its COMPLIANT/HIGH assessment exist on chain but its transaction hashes were never captured"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "dispute_id": "M-ENS-20261025-2",
+      "evidence_tx": "0x50ea149fdd7b506ce613240e629c85a2addfa0d0b3cdb37903b78cf36a448446",
+      "evaluate_tx": "0x7313454fd1c41a6666cd3a5b6f50fd5686d2b4a8030f174023c7bb90b3f6c5cb",
+      "evaluate_status": "ACCEPTED",
+      "votes": "3A/0D/1I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-2#e1"
+      ]
+    },
+    {
+      "dispute_id": "M-ENS-20261025-3",
+      "open_tx": "0x8d01110ca2609c7872c40532d4f95fbfe0117482055f54b45d9c505f5c516121",
+      "evidence_tx": "0xbe769047325445a8d43c2e9783421e79d6af6cf923b96b70131ddda72ad38556",
+      "evaluate_tx": "0x8863fa07da84b1568e3721963564d4af22932c1294de58062a337e078ff7f72d",
+      "evaluate_status": "ACCEPTED",
+      "votes": "2A/0D/2I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-3#e1"
+      ]
+    },
+    {
+      "dispute_id": "M-ENS-20261025-4",
+      "open_tx": "0x3b791535acfd42704ff190756ab4c5d23cc81216d8dbcc6f2b66da58f20acd3d",
+      "evidence_tx": "0x819244499ca3c3bac31a5a3d390becd25ffa30926415d4c62c8ead7bfaa50fbe",
+      "evaluate_tx": "0x5bbf8b0fc17aa570bdcbd4c3e66a0659ca84d812665292a05bb6ee25b314761e",
+      "evaluate_status": "ACCEPTED",
+      "votes": "2A/0D/2I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-4#e1"
+      ]
+    },
+    {
+      "dispute_id": "M-ENS-20261025-5",
+      "open_tx": "0x4f75a77ef50c1962970567d31419e78b7f6195f0db8ad44894603d7aa8451950",
+      "evidence_tx": "0x69b6f28a9d82210670b96f9723383197cdd5907d60ec20db46953005013346e7",
+      "evaluate_tx": "0x1b114519e7b15e4b5668363bb92f02e3b8bb0ccf0df8bdbec31517e0cdb173b5",
+      "evaluate_status": "ACCEPTED",
+      "votes": "3A/0D/1I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-5#e1"
+      ]
+    },
+    {
+      "dispute_id": "M-ENS-20261025-6",
+      "open_tx": "0x7dd98b423c7512df87e2d6ecab5a001d45dd6e4ca06c2ab6288a0c1bfb806c69",
+      "evidence_tx": "0x98f345d6da0f6f132cbd37b5c6ed180267315ddcd12656ca1e5db940a120bd5c",
+      "evaluate_tx": "0x46124579cef879724441f89b48ba24d488cd5e705055e1fee764e4f38106ac10",
+      "evaluate_status": "ACCEPTED",
+      "votes": "2A/0D/2I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-6#e1"
+      ]
+    },
+    {
+      "dispute_id": "M-ENS-20261025-7",
+      "open_tx": "0x0b74644fb4651a4ef91efab36c79c06c2f585f525b314578799d723f71b98dc9",
+      "evidence_tx": "0x140203a35ef062162659d6a266a48262bd2dc58d22093fa8f4deb33c4e04c75c",
+      "evaluate_tx": "0xe8665db9e7b24eba02ebccf7d8cffc0508a35b841a0cc55cf32e4e8b4441e20c",
+      "evaluate_status": "ACCEPTED",
+      "votes": "3A/0D/1I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-7#e1"
+      ]
+    },
+    {
+      "dispute_id": "M-ENS-20261025-8",
+      "open_tx": "0x325a72d161cc5ef7d3521ce592ac8ac3d648a1996e09ce61116c50bf8583b1bd",
+      "evidence_tx": "0x1e63e5b27f8765952175c75c8b4afca0d3f300b428419fac0815e68d900c26c7",
+      "evaluate_tx": "0x07bbfe88738bef75b285628c7178601cba45f16f411ff648ab864c3a906deb23",
+      "evaluate_status": "ACCEPTED",
+      "votes": "2A/0D/2I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-8#e1"
+      ]
+    },
+    {
+      "dispute_id": "M-ENS-20261025-9",
+      "open_tx": "0xe2a21594c91656e13294d855360aea1ba43050dbb29ae01f3f1f95be22d5dc47",
+      "evidence_tx": "0xe9cc3ada18b39081cb83e8e82c659568c78394c093136ae33319cd54dfd223ca",
+      "evaluate_tx": "0x58b78ef3fdfdddaa4fd3dd7af24a120a3aa5a2d80c74b86c9b5f587d46d67a12",
+      "evaluate_status": "ACCEPTED",
+      "votes": "2A/0D/2I",
+      "rotations": 0,
+      "verdict": "COMPLIANT",
+      "band": "HIGH",
+      "decided_by": "INTERPRETATION",
+      "cited_evidence": [
+        "M-ENS-20261025-9#e1"
+      ]
+    }
+  ]
+}

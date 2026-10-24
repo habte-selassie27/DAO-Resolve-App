@@ -232,9 +232,8 @@ What this shows and what it does not:
 - The two `IDLE` votes are validators that did not vote, not disagreement. `IDLE` is why
   the dispute shows 3 of 5 rather than a unanimous result; it does not weaken the
   verdict, but it does mean "all validators agreed" would be the wrong way to describe it.
-- A single successful run is not a disagreement rate. It says nothing about how often
-  bands diverge on messier pages, which is what the repeated-run measurement in the
-  integration plan exists to capture. Treat it as one data point, not a measured rate.
+- A single successful run is not a disagreement rate. The repeated-run measurement below
+  turns it into one for this case; treat this row as one data point inside that sample.
 - Confidence `MEDIUM` rather than `HIGH` is consistent with a four-post thread: real
   but thin discussion. The contract does not treat the band as a strength scale for the
   final verdict, and neither should a reader.
@@ -246,6 +245,62 @@ biggest lever on whether consensus is achievable (finding F4). The Discourse `.j
 view puts the proposal text and replies in the first few kilobytes; the rendered HTML
 page for the same thread would have spent most of the window on `<!DOCTYPE html>`, meta
 tags, and theme CSS. A DAO linking its forum thread should link the text-bearing view.
+
+### 2026-10-25 — disagreement rate over 8 repeated runs
+
+A single successful run says nothing about how often the equivalence rule rejects honest
+output. This section records repeated runs of the same question on the same deployment, so
+the rejection rate is a measurement rather than a guess.
+
+Setup (`scripts/measure_consensus.mjs`): rule `R-DISCUSSION` v5 (`NEEDS_INTERPRETATION`,
+one `REQUIRED_EVENT` check that passes), proposal `ENS-PRICING`, the same evidence URL
+(`https://discuss.ens.domains/t/22506.json`), the same claim. Each run opens a fresh
+dispute, submits the thread as `NEUTRAL` `URL` evidence, and evaluates it, so every
+`evaluate_dispute` is an independent consensus round over identical inputs. Writes are
+signed by the CLI keystore; receipts are read back with genlayer-js.
+
+| Runs | Assessed | Consensus failures | Verdicts | Bands | `decided_by` | Rotations |
+|---|---|---|---|---|---|---|
+| 8 | 8 | **0** | 8 `COMPLIANT` | 8 `HIGH` | 8 `INTERPRETATION` | 0 |
+
+Validator votes across the 8 evaluation transactions: **19 `AGREE`, 0 `DISAGREE`, 13
+`IDLE`** on 32 validator slots. No evaluation needed a retry and no transaction reached
+`UNDETERMINED`.
+
+What the numbers support:
+
+- **Verdict agreement was 100% on this case** (8 of 8), and 9 of 9 including the original
+  `D-ENS-PRICING` run. The method produced the same decision every time rather than
+  drifting between `COMPLIANT` and `VIOLATION`.
+- **The confidence band is not stable.** `D-ENS-PRICING` returned `MEDIUM`; all eight
+  repeats returned `HIGH`. Same inputs, same verdict, adjacent band. This is exactly the
+  variance the equivalence rule tolerates by allowing bands one step apart, and it is a
+  useful reminder that the band is a model-reported signal, not a measured property.
+- **Every run cited readable evidence.** All eight assessments cite their own dispute's
+  `#e1`, which is what the readable-support floor requires before a decisive verdict can
+  be stored.
+
+What the numbers do **not** support:
+
+- **This is not a general reliability rate.** It is one rule, one page, one evidence item,
+  one claim, on one deployment. The hardest part of the equivalence rule — two runs citing
+  *different* readable evidence, which must be rejected — cannot even be exercised by a
+  case with a single evidence source. A page that fails for some validators, or evidence
+  sets where two models legitimately pick different items, is where disagreement would be
+  expected to appear, and none of that is measured here.
+- **41% of validator slots were `IDLE`** (13 of 32). `IDLE` is a validator that did not
+  vote, usually because quorum was already reached. The consensus was real, but "every
+  validator agreed" would be false; at most 3 of 4 validators voted in any transaction.
+- **A 0% failure rate over 8 runs is not proof the rule never rejects.** With zero observed
+  failures, the 95% upper bound on the failure rate from this sample is still around 31%
+  (rule of three). Treat the result as "no failure observed in eight tries", not as
+  "failures do not happen".
+
+Raw record: [evidence/consensus-disagreement.json](evidence/consensus-disagreement.json)
+(per-run transaction hashes, votes, verdicts, and citations) with the individual harness
+outputs in `docs/evidence/runs/`. One earlier attempt, `M-ENS-20261025-1`, is excluded from
+the table because the harness was killed before writing its record; its dispute and
+`COMPLIANT`/`HIGH` assessment do exist on chain.
 
 ## Related documents
 

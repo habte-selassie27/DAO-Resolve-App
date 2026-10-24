@@ -267,6 +267,7 @@ Real, current results:
 | Browser-wallet write | manual injected EIP-1193 provider | **1 tx FINALIZED** on the fresh deployment; proposal read back |
 | Frontend production build | `cd frontend && npm run build` | passes |
 | Deployment views | `CONTRACT_ADDRESS=… npm run verify` | 18/18 views passed on the demo address |
+| Consensus disagreement rate | `CONTRACT_ADDRESS=… RUNS=8 node scripts/measure_consensus.mjs` | **8/8 assessed, 0 failures, 0 `DISAGREE` on 32 validator slots, 0 rotations** (2026-10-25, one rule + one live page) |
 
 The e2e suite needs a Playwright Chromium build. In this environment the cached browser
 was older than the package expected, so the run used:

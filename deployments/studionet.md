@@ -62,6 +62,35 @@ Seeded demo data (all verified by reading the contract back):
   is presented as such rather than as an example of evidence-based assessment
 - Dispute `D-TREASURY` left `OPEN` (vote-required category, only escalatable)
 
+### Repeated consensus runs (`M-ENS-20261025-*`)
+
+To turn one lucky run into a rate, `scripts/measure_consensus.mjs` repeats the same
+question eight times: same rule version (`R-DISCUSSION` v5, `NEEDS_INTERPRETATION`), same
+proposal (`ENS-PRICING`), same evidence URL, same claim. Each run is a fresh dispute, so
+each `evaluate_dispute` is an independent consensus round.
+
+| Dispute | Validator votes | Rotations | Verdict | Evaluate transaction |
+|---|---|---|---|---|
+| `M-ENS-20261025-2` | 3 `AGREE` / 1 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0x7313454fd1c41a6666cd3a5b6f50fd5686d2b4a8030f174023c7bb90b3f6c5cb` |
+| `M-ENS-20261025-3` | 2 `AGREE` / 2 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0x8863fa07da84b1568e3721963564d4af22932c1294de58062a337e078ff7f72d` |
+| `M-ENS-20261025-4` | 2 `AGREE` / 2 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0x5bbf8b0fc17aa570bdcbd4c3e66a0659ca84d812665292a05bb6ee25b314761e` |
+| `M-ENS-20261025-5` | 3 `AGREE` / 1 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0x1b114519e7b15e4b5668363bb92f02e3b8bb0ccf0df8bdbec31517e0cdb173b5` |
+| `M-ENS-20261025-6` | 2 `AGREE` / 2 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0x46124579cef879724441f89b48ba24d488cd5e705055e1fee764e4f38106ac10` |
+| `M-ENS-20261025-7` | 3 `AGREE` / 1 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0xe8665db9e7b24eba02ebccf7d8cffc0508a35b841a0cc55cf32e4e8b4441e20c` |
+| `M-ENS-20261025-8` | 2 `AGREE` / 2 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0x07bbfe88738bef75b285628c7178601cba45f16f411ff648ab864c3a906deb23` |
+| `M-ENS-20261025-9` | 2 `AGREE` / 2 `IDLE` | 0 | `COMPLIANT` / `HIGH` | `0x58b78ef3fdfdddaa4fd3dd7af24a120a3aa5a2d80c74b86c9b5f587d46d67a12` |
+
+Result: 8 of 8 assessed, 0 consensus failures, 0 `DISAGREE` votes on 32 validator slots
+(19 `AGREE`, 13 `IDLE`), 0 rotations. `M-ENS-20261025-1` also ran and holds a
+`COMPLIANT`/`HIGH` assessment, but its hashes were not captured because the harness was
+killed mid-run, so it is excluded from the table. Interpretation and the caveats are in
+[docs/equivalence.md](../docs/equivalence.md); the raw record is
+[docs/evidence/consensus-disagreement.json](../docs/evidence/consensus-disagreement.json).
+
+Three harness probes (`M-PROBE-q1`, `M-PROBE-q2-1`, `M-PROBE-q3-1`) were also created while
+debugging the CLI argument handling and then withdrawn (`WITHDRAWN`, read back from chain).
+They remain in the dispute list as terminal records.
+
 ### Why this deployment replaced the earlier ones
 
 `list_proposals` paged `self.proposals`, a `TreeMap` keyed by proposal id, with an

@@ -2,6 +2,44 @@
 
 All notable changes to DAOResolve are recorded here.
 
+## 2026-10-25 (measured consensus disagreement rate)
+
+DONE:
+- Added `scripts/measure_consensus.mjs`: repeats one pinned rule version, one proposal, and
+  one live evidence URL across N independent disputes so every `evaluate_dispute` is its own
+  consensus round. Writes go through the `genlayer` CLI keystore (no key is read into the
+  process); receipts are read back with genlayer-js and recorded per run.
+- Ran 8 rounds against `R-DISCUSSION` v5 / `ENS-PRICING` / the ENS thread, on
+  `0x70bE655a5e504c9F1364e3e2C34e87aC348d3BAd`.
+- Recorded the raw evidence in `docs/evidence/consensus-disagreement.json` plus one JSON
+  per run in `docs/evidence/runs/`, and wrote up the result and its caveats in
+  `docs/equivalence.md`.
+- Withdrew the three harness probes (`M-PROBE-q1`, `M-PROBE-q2-1`, `M-PROBE-q3-1`) after
+  debugging CLI argument handling; all three read back `WITHDRAWN`.
+
+PROOF:
+- 8 of 8 runs produced an assessment; 0 consensus failures; 0 `DISAGREE` votes across 32
+  validator slots (19 `AGREE`, 13 `IDLE`); 0 rotations; every run cited its own readable
+  evidence id.
+- All 8 returned `COMPLIANT` / `HIGH` / `INTERPRETATION`. Example transaction
+  `0x58b78ef3fdfdddaa4fd3dd7af24a120a3aa5a2d80c74b86c9b5f587d46d67a12`
+  (`M-ENS-20261025-9`, 2 `AGREE` / 2 `IDLE`).
+
+LIMIT:
+- One rule, one page, one evidence item: the rule's hardest clause (two runs citing
+  different readable evidence must be rejected) cannot be exercised by a single-source
+  case, so this is not a general reliability rate. With 0 failures in 8 runs the 95% upper
+  bound on the failure rate is still about 31%.
+- The confidence band moved between the original run (`MEDIUM`) and all eight repeats
+  (`HIGH`) on identical inputs. Adjacent, so it is within the equivalence rule, but it shows
+  the band is model-reported rather than measured.
+- 13 of 32 validator slots were `IDLE` (quorum reached first), so at most 3 of 4 validators
+  voted in any transaction.
+
+NEXT:
+- Repeat the measurement on a case with two disagreeing readable sources, which is where
+  the readable-overlap clause can actually fail.
+
 ## 2026-10-24 (real consensus run on live evidence)
 
 DONE:
