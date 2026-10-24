@@ -103,6 +103,7 @@ const proposals = [
   ["P-REVIEW", "https://forum.example.org/t/p-review", "Review period shorter than the rule requires."],
   ["P-DISCUSSION", "https://forum.example.org/t/p-discussion", "Discussion opened and vote not started."],
   ["P-TREASURY", "https://forum.example.org/t/p-treasury", "Treasury transfer proposal."],
+  ["P-CONTENT", "https://forum.example.org/t/p-content", "Content moderation policy proposal."],
 ];
 for (const [id, ref, note] of proposals) {
   write("register_proposal", [id, ref, note], { allowExisting: true });
@@ -115,6 +116,8 @@ const events = [
   ["P-DISCUSSION", "e2", "DISCUSSION_OPENED", now - 17000, "https://forum.example.org/t/p-discussion"],
   ["P-TREASURY", "e1", "SUBMITTED", now - 16000, "https://forum.example.org/t/p-treasury"],
   ["P-TREASURY", "e2", "VOTING_STARTED", now - 15000, "https://vote.example.org/p-treasury"],
+  ["P-CONTENT", "e1", "SUBMITTED", now - 14000, "https://forum.example.org/t/p-content"],
+  ["P-CONTENT", "e2", "DISCUSSION_OPENED", now - 13000, "https://forum.example.org/t/p-content"],
 ];
 for (const [proposal, eventId, type, timestamp, ref] of events) {
   write("record_process_event", [proposal, eventId, type, demoActor, timestamp, ref], {
@@ -149,6 +152,16 @@ write(
     "R-TREASURY",
     "P-TREASURY",
     "This treasury proposal requires the DAO's own vote.",
+  ],
+  { allowExisting: true }
+);
+write(
+  "open_dispute",
+  [
+    "D-CONTENT",
+    "R-CONTENT",
+    "P-CONTENT",
+    "The content moderation proposal did not record the required disclosure event.",
   ],
   { allowExisting: true }
 );

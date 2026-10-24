@@ -9,6 +9,18 @@ export function formatAddress(value) {
   return value || "—";
 }
 
+export function safeAddress(value) {
+  if (!value) return "—";
+  try {
+    const text = String(value);
+    if (!text.startsWith("0x")) return "—";
+    if (!/^[0-9a-fA-F]{40}$/.test(text.slice(2))) return "—";
+    return shortAddress(text);
+  } catch {
+    return "—";
+  }
+}
+
 export function formatTime(seconds) {
   if (!seconds) return "—";
   const date = new Date(Number(seconds) * 1000);
